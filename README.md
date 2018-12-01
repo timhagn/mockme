@@ -58,7 +58,7 @@ git submodule update --init --force
 This one fetches the mockme(-react) sub-repository.
 
 Next, download the libraries into your folder of the same name:   
-1. Do wnload html2canvas library (version 1.0.0-alpha.12 or later) from 
+1. Download html2canvas library (version 1.0.0-alpha.12 or later) from 
    [https://html2canvas.hertzen.com/](https://html2canvas.hertzen.com/)
 2. Unzip it into the libraries folder, so that there's a
    `libraries/html2canvas/html2canvas.min.js` file, in addition to the other 
