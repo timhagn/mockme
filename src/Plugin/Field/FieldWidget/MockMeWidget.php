@@ -88,7 +88,7 @@ class MockMeWidget extends ImageWidget {
     $fieldName = $element['#field_name'];
     $title = $element['#title'];
 
-    $mockme_hidden = [
+    $element['mockme_hidden'] = [
       '#type' => 'hidden',
       '#value' => '',
     ];
@@ -102,8 +102,12 @@ class MockMeWidget extends ImageWidget {
       '#weight' => -6,
       '#attached' => [
         'drupalSettings' => [
-          'mockmeRoot' => $this->mockmeRoot,
-          'fieldName' =>$fieldName,
+          'mockmeSettings' => [
+            'drupal' => TRUE,
+            'mockmeRoot' => $this->mockmeRoot,
+            'fieldName' => $fieldName,
+            'sgEndpoint' => \Drupal::request()->getSchemeAndHttpHost() . '/mockme/cs',
+          ],
         ],
         'library' => [
           'mockme/react',
@@ -112,7 +116,6 @@ class MockMeWidget extends ImageWidget {
         ],
       ],
       '#upload_location' => $element['#upload_location'],
-      'mockme_hidden' => $mockme_hidden,
     ];
 
     return $element;
@@ -158,7 +161,9 @@ class MockMeWidget extends ImageWidget {
    * @return bool|mixed
    */
   public static function valueCallbackMockMeWidget(&$element, $input, FormStateInterface $form_state) {
-    $imageData = $input['mockme_root']['mockme_hidden'];
+    $imageData = !empty($input['mockme_hidden'])
+      ? $input['mockme_hidden']
+      : FALSE;
     $uploadLocation = $element['#upload_location'];
 
     if ($imageData) {

@@ -3,10 +3,11 @@
     attach: function (context, settings) {
       // Only call on Form.
       if (context.toString() === '[object HTMLFormElement]') {
-        const $container = document.getElementById(settings.mockmeRoot);
+        const $container = document
+          .getElementById(settings.mockmeSettings.mockmeRoot);
         // If container & RenderMockMe from mockme.js exist, render React.
         if ($container && typeof RenderMockMe !== 'undefined') {
-          new RenderMockMe($container, settings);
+          new RenderMockMe($container, settings.mockmeSettings);
         }
       }
     }
