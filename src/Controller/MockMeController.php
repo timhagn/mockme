@@ -85,7 +85,7 @@ class MockMeController extends ControllerBase {
    * @return null | string
    */
   function getOpenGraphImage($url) {
-    $pageContent = file_get_contents($url, false, null,0, 4096);
+    $pageContent = file_get_contents($url, false, null, 0, 4096);
 
     $domObj = new DOMDocument();
     @$domObj->loadHTML($pageContent);

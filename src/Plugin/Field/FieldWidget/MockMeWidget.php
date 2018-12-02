@@ -137,7 +137,6 @@ class MockMeWidget extends ImageWidget {
     $element['#description'] = '';
     $element['upload']['#attributes']['class'][] = 'hidden';
     unset($element['upload_button']['#attributes']['class']);
-    $element['upload_button']['#attributes']['class'][] = 'make-screenshot-button';
     $element['upload_button']['#value'] = t('Save MockMe Mock Up');
 
     if (!empty($element['#files']) && $element['#preview_image_style']) {
