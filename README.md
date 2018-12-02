@@ -74,6 +74,14 @@ Enable the module in Drupal or use `drush en mockme`.
 
 
 
+### Troubleshooting
+
+Should PhantomJS not produce results, look in your server's `error.log` and 
+the `.htaccess` file in `sites/default/files`. Remove `-ExecCGI` and `-Includes`
+so PhantomJS may be run by PHP from it, if necessary.  
+  
+
+
 #### TODO:
 - add some settings to the widget
 - add tests
