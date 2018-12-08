@@ -160,9 +160,16 @@ class MockMeWidget extends ImageWidget {
    * @return bool|mixed
    */
   public static function valueCallbackMockMeWidget(&$element, $input, FormStateInterface $form_state) {
-    $imageData = !empty($input['mockme_hidden'])
-      ? $input['mockme_hidden']
-      : FALSE;
+    $imageData = FALSE;
+    if (!empty($input['mockme_hidden'])) {
+      $imageInfo = explode('...---IMAGE-DATA---...', $input['mockme_hidden']);
+
+      $imageData = [
+        'imageInfo' => json_decode($imageInfo[0], TRUE),
+        'data' => $imageInfo[1],
+      ];
+    }
+
     $uploadLocation = $element['#upload_location'];
 
     if ($imageData) {
@@ -192,11 +199,27 @@ class MockMeWidget extends ImageWidget {
    * @return \Drupal\file\FileInterface|false
    * @throws \Exception
    */
-  public static function saveMockUpImage($imageData, $destination, $fileName = 'test') {
+  public static function saveMockUpImage($imageData, $destination, $fileName = '') {
     $file = false;
+    $currentFileName = $fileName;
+    $base64data = $imageData['data'];
+    if (empty($currentFileName)) {
+      if (isset($imageData['imageInfo']['device']['deviceName']) &&
+          isset($imageData['imageInfo']['device']['deviceOrientation']) &&
+          isset($imageData['imageInfo']['device']['deviceColor']) &&
+          isset($imageData['imageInfo']['imageString'])) {
+        $currentFileName = "{$imageData['imageInfo']['device']['deviceName']}"
+                          ."_{$imageData['imageInfo']['device']['deviceOrientation']}"
+                          ."_{$imageData['imageInfo']['device']['deviceColor']}"
+                          . '_' . urlencode($imageData['imageInfo']['imageString']);
+      }
+      else {
+        $currentFileName = 'test' . time();
+      }
+    }
     // Do we have a correct String format? Then extract Data & Type.
-    if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
-      $data = substr($imageData, strpos($imageData, ',') + 1);
+    if (preg_match('/^data:image\/(\w+);base64,/', $base64data, $type)) {
+      $data = substr($base64data, strpos($base64data, ',') + 1);
       $type = strtolower($type[1]);
 
       if (!in_array($type, [ 'jpg', 'jpeg', 'gif', 'png' ])) {
@@ -207,9 +230,16 @@ class MockMeWidget extends ImageWidget {
     }
     if (!empty($data)) {
       file_prepare_directory($destination, FILE_CREATE_DIRECTORY);
-      $file = file_save_data($data, $destination . '/' . $fileName . '.' . $type);
+      $file = file_save_data($data, $destination . '/' . $currentFileName . '.' . $type);
     }
     return $file;
+  }
+
+  /**
+   * Creates a name for the screenshot.
+   */
+  public function createFileName() {
+
   }
 
 }

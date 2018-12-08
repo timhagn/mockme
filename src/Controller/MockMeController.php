@@ -147,7 +147,7 @@ class MockMeController extends ControllerBase {
             $screen = new Capture($snapshotURL);
             $screen->jobs
               ->setLocation($this->fileSystem->realpath($this->jobsDir));
-            $screen->setBinPath(realpath('vendor/bin/phantomjs'));
+//            $screen->setBinPath(realpath('vendor/bin/phantomjs'));
           } catch (\Exception $exception) {
             if ($exception->getMessage() === "The directory '' does not exist.") {
               $errorMsg =
