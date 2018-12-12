@@ -208,10 +208,12 @@ class MockMeWidget extends ImageWidget {
           isset($imageData['imageInfo']['device']['deviceOrientation']) &&
           isset($imageData['imageInfo']['device']['deviceColor']) &&
           isset($imageData['imageInfo']['imageString'])) {
-        $currentFileName = "{$imageData['imageInfo']['device']['deviceName']}"
+        $currentFileName = trim("{$imageData['imageInfo']['device']['deviceName']}"
                           ."_{$imageData['imageInfo']['device']['deviceOrientation']}"
                           ."_{$imageData['imageInfo']['device']['deviceColor']}"
-                          . '_' . urlencode($imageData['imageInfo']['imageString']);
+                          . '_'
+                          . preg_replace('/\W/', '',
+                              $imageData['imageInfo']['imageString']));
       }
       else {
         $currentFileName = 'test' . time();
